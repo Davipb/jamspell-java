@@ -1,8 +1,10 @@
 plugins {
     id 'java-library'
+    id 'maven-publish'
+    id 'com.jfrog.bintray' version '1.8.4'
 }
 
-group = 'com.davipb.jamspell'
+group = 'com.davipb'
 version = '0.0.11'
 
 sourceCompatibility = 7
@@ -13,4 +15,85 @@ jar {
         attributes 'Implementation-Title': 'JamSpell JNI', 'Implementation-Version': version
         attributes 'Specification-Title': 'JamSpell', 'Specification-Version': version
     }
+}
+
+
+task sourcesJar(type: Jar) {
+    from sourceSets.main.allJava
+}
+
+def description = 'A Java JNI binding for JamSpell (a modern spellchecking library), generated with Swig'
+def repository = 'https://github.com/Davipb/jamspell-jni.git'
+def url = 'https://github.com/Davipb/jamspell-jni'
+def issuesUrl = 'https://github.com/Davipb/jamspell-jni/issues'
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            from components.java
+
+            artifact sourcesJar {
+                classifier 'sources'
+            }
+
+            pom.withXml {
+                def root = asNode()
+                root.appendNode('name', 'JamSpell JNI')
+                root.appendNode('description', description)
+                root.appendNode('url', url)
+                root.appendNode('inceptionYear', '2018')
+
+                def licenses = root.appendNode('licenses')
+                def mit = licenses.appendNode('license')
+                mit.appendNode('name', 'MIT License')
+                mit.appendNode('url', 'https://raw.githubusercontent.com/Davipb/jamspell-jni/master/LICENSE')
+                mit.appendNode('distribution', 'repo')
+
+                def developers = root.appendNode('developers')
+                def davipb = developers.appendNode('developer')
+                davipb.appendNode('id', 'Davipb')
+                davipb.appendNode('name', 'Davipb')
+                davipb.appendNode('email', 'daviparca@gmail.com')
+
+                def issueManagement = root.appendNode('issueManagement')
+                issueManagement.appendNode('system', 'GitHub')
+                issueManagement.appendNode('url', issuesUrl)
+
+                def scm = root.appendNode('scm')
+                scm.appendNode('connection', "scm:git:$repository")
+                scm.appendNode('developerConnection', "scm:git:$repository")
+                scm.appendNode('tag', 'HEAD')
+                scm.appendNode('url', url)
+            }
+        }
+    }
+}
+
+bintray {
+    user = project.ext.'bintray.user'
+    key = project.ext.'bintray.key'
+    pkg {
+        repo = 'maven'
+        name = project.name
+        desc = description
+        websiteUrl = url
+        issueTrackerUrl = issuesUrl
+        vcsUrl = url
+        licenses = [ 'MIT' ]
+        labels = [ 'spellcheck', 'spellchecker', 'java', 'jni', 'jamspell' ]
+        publicDownloadNumbers = true
+
+        githubRepo = repository
+
+        version {
+            name = project.version
+            released = new Date()
+
+            gpg {
+                sign = true
+                passphrase = project.ext.'bintray.pkg.version.gpg.passphrase'
+            }
+        }
+    }
+    publications = [ 'maven' ]
 }
