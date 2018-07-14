@@ -5,6 +5,10 @@ This project contains both the Java JNI API and the native C/C++ JNI implementat
 As such, this is a bare-bones library that simply aims to represent the native JamSpell in the Java world, allowing other libraries with better
 usability to be easily built on top of it by simply looking at how the C++ project works.
 
+## Using this binding
+You'll need to provide a compiled version of the native JNI implementation and load it with `System.load(String)` or `System.loadLibrary(String)`
+before using any of the classes in the library.
+
 ## Generating & Building
 Use the included `jamspell-jni.i` swig interface file to generate the appropriate .cpp and .java files. A PowerShell script containing the appropriate commands
 can be found at the root of the repository (`generate.ps1`).
