@@ -1,0 +1,3 @@
+[submodule "JamSpell"]
+	path = JamSpell
+	url = https://github.com/bakwc/JamSpell.git

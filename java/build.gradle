@@ -1,0 +1,16 @@
+plugins {
+    id 'java-library'
+}
+
+group = 'com.davipb.jamspell'
+version = '0.0.11'
+
+sourceCompatibility = 7
+targetCompatibility = 7
+
+jar {
+    manifest {
+        attributes 'Implementation-Title': 'JamSpell JNI', 'Implementation-Version': version
+        attributes 'Specification-Title': 'JamSpell', 'Specification-Version': version
+    }
+}
