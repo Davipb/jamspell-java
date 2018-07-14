@@ -2,6 +2,12 @@ plugins {
     id 'java-library'
     id 'maven-publish'
     id 'com.jfrog.bintray' version '1.8.4'
+    id 'io.franzbecker.gradle-lombok' version '1.14'
+}
+
+wrapper {
+    gradleVersion = '4.8.1'
+    distributionType = Wrapper.DistributionType.ALL
 }
 
 group = 'com.davipb'
@@ -9,6 +15,28 @@ version = '1.0.0-SNAPSHOT'
 
 sourceCompatibility = 8
 targetCompatibility = 8
+
+repositories {
+    jcenter()
+}
+
+lombok {
+    version = '1.18.0'
+    sha256 = ''
+}
+
+import io.franzbecker.gradle.lombok.task.DelombokTask
+
+task delombok(type: DelombokTask) {
+    dependsOn compileJava
+
+    def outputDir = file("$buildDir/delombok")
+    outputs.dir outputDir
+    sourceSets.main.java.srcDirs.each {
+        inputs.dir it
+        args it, "-d", outputDir
+    }
+}
 
 jar {
     manifest {
@@ -45,7 +73,7 @@ publishing {
             from components.java
 
             artifact sourcesJar
-            artifact javadocjar
+            artifact javadocJar
 
             pom.withXml {
                 def root = asNode()
