@@ -5,40 +5,51 @@ plugins {
 }
 
 group = 'com.davipb'
-version = '0.0.11'
+version = '1.0.0-SNAPSHOT'
 
-sourceCompatibility = 7
-targetCompatibility = 7
+sourceCompatibility = 8
+targetCompatibility = 8
 
 jar {
     manifest {
-        attributes 'Implementation-Title': 'JamSpell JNI', 'Implementation-Version': version
-        attributes 'Specification-Title': 'JamSpell', 'Specification-Version': version
+        attributes 'Implementation-Title': 'JamSpell Java', 'Implementation-Version': version
+        attributes 'Specification-Title': 'JamSpell C++', 'Specification-Version': '0.0.11'
     }
 }
 
 
 task sourcesJar(type: Jar) {
     from sourceSets.main.allJava
+    classifier = 'sources'
 }
 
-def description = 'A Java JNI binding for JamSpell (a modern spellchecking library), generated with Swig'
-def repository = 'https://github.com/Davipb/jamspell-jni.git'
-def url = 'https://github.com/Davipb/jamspell-jni'
-def issuesUrl = 'https://github.com/Davipb/jamspell-jni/issues'
+javadoc {
+    dependsOn delombok
+    source = delombok.outputDir
+    failOnError = false
+}
+
+task javadocJar(type: Jar) {
+    from javadoc
+    classifier = 'javadoc'
+}
+
+def description = 'A Java binding for JamSpell, a modern spellchecking library'
+def repository = 'https://github.com/Davipb/jamspell-java.git'
+def url = 'https://github.com/Davipb/jamspell-java'
+def issuesUrl = 'https://github.com/Davipb/jamspell-java/issues'
 
 publishing {
     publications {
         maven(MavenPublication) {
             from components.java
 
-            artifact sourcesJar {
-                classifier 'sources'
-            }
+            artifact sourcesJar
+            artifact javadocjar
 
             pom.withXml {
                 def root = asNode()
-                root.appendNode('name', 'JamSpell JNI')
+                root.appendNode('name', 'JamSpell Java Binding')
                 root.appendNode('description', description)
                 root.appendNode('url', url)
                 root.appendNode('inceptionYear', '2018')
@@ -46,7 +57,7 @@ publishing {
                 def licenses = root.appendNode('licenses')
                 def mit = licenses.appendNode('license')
                 mit.appendNode('name', 'MIT License')
-                mit.appendNode('url', 'https://raw.githubusercontent.com/Davipb/jamspell-jni/master/LICENSE')
+                mit.appendNode('url', 'https://raw.githubusercontent.com/Davipb/jamspell-java/master/LICENSE')
                 mit.appendNode('distribution', 'repo')
 
                 def developers = root.appendNode('developers')
