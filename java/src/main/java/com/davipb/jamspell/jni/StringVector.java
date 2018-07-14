@@ -8,21 +8,17 @@
 
 package com.davipb.jamspell.jni;
 
-public class StringVector {
+public final class StringVector {
   private transient long swigCPtr;
   protected transient boolean swigCMemOwn;
 
-  protected StringVector(long cPtr, boolean cMemoryOwn) {
+  public StringVector(long cPtr, boolean cMemoryOwn) {
     swigCMemOwn = cMemoryOwn;
     swigCPtr = cPtr;
   }
 
-  protected static long getCPtr(StringVector obj) {
+  public static long getCPtr(StringVector obj) {
     return (obj == null) ? 0 : obj.swigCPtr;
-  }
-
-  protected void finalize() {
-    delete();
   }
 
   public synchronized void delete() {

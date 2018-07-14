@@ -8,21 +8,17 @@
 
 package com.davipb.jamspell.jni;
 
-public class NativeSpellCorrector {
+public final class NativeSpellCorrector {
   private transient long swigCPtr;
   protected transient boolean swigCMemOwn;
 
-  protected NativeSpellCorrector(long cPtr, boolean cMemoryOwn) {
+  public NativeSpellCorrector(long cPtr, boolean cMemoryOwn) {
     swigCMemOwn = cMemoryOwn;
     swigCPtr = cPtr;
   }
 
-  protected static long getCPtr(NativeSpellCorrector obj) {
+  public static long getCPtr(NativeSpellCorrector obj) {
     return (obj == null) ? 0 : obj.swigCPtr;
-  }
-
-  protected void finalize() {
-    delete();
   }
 
   public synchronized void delete() {
