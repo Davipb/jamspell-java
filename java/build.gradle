@@ -20,6 +20,10 @@ repositories {
     jcenter()
 }
 
+dependencies {
+    compileOnly 'org.jetbrains:annotations:16.0.2'
+}
+
 lombok {
     version = '1.18.0'
     sha256 = ''
