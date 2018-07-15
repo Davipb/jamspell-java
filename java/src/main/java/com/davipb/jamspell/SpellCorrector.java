@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.Arrays;
 import java.util.List;
 
@@ -19,6 +20,9 @@ import java.util.List;
  * The main JamSpell class, capable of detecting and fixing spelling mistakes.
  */
 public final class SpellCorrector {
+
+    static { JamSpellMemoryManager.initialize(); }
+
     private final NativeSpellCorrector corrector = new NativeSpellCorrector();
 
     {
@@ -82,7 +86,7 @@ public final class SpellCorrector {
     public void loadLangModel(@NonNull InputStream stream) throws JamSpellException {
         try {
             val temp = Files.createTempFile("jamspell-", ".bin");
-            Files.copy(stream, temp);
+            Files.copy(stream, temp, StandardCopyOption.REPLACE_EXISTING);
             temp.toFile().deleteOnExit();
             loadLangModel(temp.toString());
         } catch (IOException e) {
