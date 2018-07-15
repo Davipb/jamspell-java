@@ -1,4 +1,4 @@
-%module Jamspell
+%module JamSpell
 
 %rename(NativeSpellCorrector) TSpellCorrector;
 %rename("%(lowercamelcase)s", %$isfunction) "";

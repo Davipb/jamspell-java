@@ -25,50 +25,50 @@ public final class StringVector {
     if (swigCPtr != 0) {
       if (swigCMemOwn) {
         swigCMemOwn = false;
-        JamspellJNI.delete_StringVector(swigCPtr);
+        JamSpellJNI.delete_StringVector(swigCPtr);
       }
       swigCPtr = 0;
     }
   }
 
   public StringVector() {
-    this(JamspellJNI.new_StringVector__SWIG_0(), true);
+    this(JamSpellJNI.new_StringVector__SWIG_0(), true);
   }
 
   public StringVector(long n) {
-    this(JamspellJNI.new_StringVector__SWIG_1(n), true);
+    this(JamSpellJNI.new_StringVector__SWIG_1(n), true);
   }
 
   public long size() {
-    return JamspellJNI.StringVector_size(swigCPtr, this);
+    return JamSpellJNI.StringVector_size(swigCPtr, this);
   }
 
   public long capacity() {
-    return JamspellJNI.StringVector_capacity(swigCPtr, this);
+    return JamSpellJNI.StringVector_capacity(swigCPtr, this);
   }
 
   public void reserve(long n) {
-    JamspellJNI.StringVector_reserve(swigCPtr, this, n);
+    JamSpellJNI.StringVector_reserve(swigCPtr, this, n);
   }
 
   public boolean isEmpty() {
-    return JamspellJNI.StringVector_isEmpty(swigCPtr, this);
+    return JamSpellJNI.StringVector_isEmpty(swigCPtr, this);
   }
 
   public void clear() {
-    JamspellJNI.StringVector_clear(swigCPtr, this);
+    JamSpellJNI.StringVector_clear(swigCPtr, this);
   }
 
   public void add(String x) {
-    JamspellJNI.StringVector_add(swigCPtr, this, x);
+    JamSpellJNI.StringVector_add(swigCPtr, this, x);
   }
 
   public String get(int i) {
-    return JamspellJNI.StringVector_get(swigCPtr, this, i);
+    return JamSpellJNI.StringVector_get(swigCPtr, this, i);
   }
 
   public void set(int i, String val) {
-    JamspellJNI.StringVector_set(swigCPtr, this, i, val);
+    JamSpellJNI.StringVector_set(swigCPtr, this, i, val);
   }
 
 }

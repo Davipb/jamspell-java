@@ -25,42 +25,42 @@ public final class NativeSpellCorrector {
     if (swigCPtr != 0) {
       if (swigCMemOwn) {
         swigCMemOwn = false;
-        JamspellJNI.delete_NativeSpellCorrector(swigCPtr);
+        JamSpellJNI.delete_NativeSpellCorrector(swigCPtr);
       }
       swigCPtr = 0;
     }
   }
 
   public boolean loadLangModel(String modelFile) {
-    return JamspellJNI.NativeSpellCorrector_loadLangModel(swigCPtr, this, modelFile);
+    return JamSpellJNI.NativeSpellCorrector_loadLangModel(swigCPtr, this, modelFile);
   }
 
   public boolean trainLangModel(String textFile, String alphabetFile, String modelFile) {
-    return JamspellJNI.NativeSpellCorrector_trainLangModel(swigCPtr, this, textFile, alphabetFile, modelFile);
+    return JamSpellJNI.NativeSpellCorrector_trainLangModel(swigCPtr, this, textFile, alphabetFile, modelFile);
   }
 
   public StringVector getCandidates(StringVector sentence, long position) {
-    return new StringVector(JamspellJNI.NativeSpellCorrector_getCandidates(swigCPtr, this, StringVector.getCPtr(sentence), sentence, position), true);
+    return new StringVector(JamSpellJNI.NativeSpellCorrector_getCandidates(swigCPtr, this, StringVector.getCPtr(sentence), sentence, position), true);
   }
 
   public String fixFragment(String text) {
-    return JamspellJNI.NativeSpellCorrector_fixFragment(swigCPtr, this, text);
+    return JamSpellJNI.NativeSpellCorrector_fixFragment(swigCPtr, this, text);
   }
 
   public String fixFragmentNormalized(String text) {
-    return JamspellJNI.NativeSpellCorrector_fixFragmentNormalized(swigCPtr, this, text);
+    return JamSpellJNI.NativeSpellCorrector_fixFragmentNormalized(swigCPtr, this, text);
   }
 
   public void setPenalty(double knownWordsPenaly, double unknownWordsPenalty) {
-    JamspellJNI.NativeSpellCorrector_setPenalty(swigCPtr, this, knownWordsPenaly, unknownWordsPenalty);
+    JamSpellJNI.NativeSpellCorrector_setPenalty(swigCPtr, this, knownWordsPenaly, unknownWordsPenalty);
   }
 
   public void setMaxCandiatesToCheck(long maxCandidatesToCheck) {
-    JamspellJNI.NativeSpellCorrector_setMaxCandiatesToCheck(swigCPtr, this, maxCandidatesToCheck);
+    JamSpellJNI.NativeSpellCorrector_setMaxCandiatesToCheck(swigCPtr, this, maxCandidatesToCheck);
   }
 
   public NativeSpellCorrector() {
-    this(JamspellJNI.new_NativeSpellCorrector(), true);
+    this(JamSpellJNI.new_NativeSpellCorrector(), true);
   }
 
 }

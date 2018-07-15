@@ -8,7 +8,7 @@
 
 package com.davipb.jamspell.jni;
 
-public class JamspellJNI {
+public class JamSpellJNI {
   public final static native long new_StringVector__SWIG_0();
   public final static native long new_StringVector__SWIG_1(long jarg1);
   public final static native long StringVector_size(long jarg1, StringVector jarg1_);

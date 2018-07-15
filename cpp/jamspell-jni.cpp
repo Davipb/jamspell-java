@@ -262,7 +262,7 @@ SWIGINTERN void std_vector_Sl_std_wstring_Sg__set(std::vector< std::wstring > *s
 extern "C" {
 #endif
 
-SWIGEXPORT jlong JNICALL Java_com_davipb_jamspell_jni_JamspellJNI_new_1StringVector_1_1SWIG_10(JNIEnv *jenv, jclass jcls) {
+SWIGEXPORT jlong JNICALL Java_com_davipb_jamspell_jni_JamSpellJNI_new_1StringVector_1_1SWIG_10(JNIEnv *jenv, jclass jcls) {
   jlong jresult = 0 ;
   std::vector< std::wstring > *result = 0 ;
   
@@ -274,7 +274,7 @@ SWIGEXPORT jlong JNICALL Java_com_davipb_jamspell_jni_JamspellJNI_new_1StringVec
 }
 
 
-SWIGEXPORT jlong JNICALL Java_com_davipb_jamspell_jni_JamspellJNI_new_1StringVector_1_1SWIG_11(JNIEnv *jenv, jclass jcls, jlong jarg1) {
+SWIGEXPORT jlong JNICALL Java_com_davipb_jamspell_jni_JamSpellJNI_new_1StringVector_1_1SWIG_11(JNIEnv *jenv, jclass jcls, jlong jarg1) {
   jlong jresult = 0 ;
   std::vector< std::wstring >::size_type arg1 ;
   std::vector< std::wstring > *result = 0 ;
@@ -288,7 +288,7 @@ SWIGEXPORT jlong JNICALL Java_com_davipb_jamspell_jni_JamspellJNI_new_1StringVec
 }
 
 
-SWIGEXPORT jlong JNICALL Java_com_davipb_jamspell_jni_JamspellJNI_StringVector_1size(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+SWIGEXPORT jlong JNICALL Java_com_davipb_jamspell_jni_JamSpellJNI_StringVector_1size(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
   jlong jresult = 0 ;
   std::vector< std::wstring > *arg1 = (std::vector< std::wstring > *) 0 ;
   std::vector< std::wstring >::size_type result;
@@ -303,7 +303,7 @@ SWIGEXPORT jlong JNICALL Java_com_davipb_jamspell_jni_JamspellJNI_StringVector_1
 }
 
 
-SWIGEXPORT jlong JNICALL Java_com_davipb_jamspell_jni_JamspellJNI_StringVector_1capacity(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+SWIGEXPORT jlong JNICALL Java_com_davipb_jamspell_jni_JamSpellJNI_StringVector_1capacity(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
   jlong jresult = 0 ;
   std::vector< std::wstring > *arg1 = (std::vector< std::wstring > *) 0 ;
   std::vector< std::wstring >::size_type result;
@@ -318,7 +318,7 @@ SWIGEXPORT jlong JNICALL Java_com_davipb_jamspell_jni_JamspellJNI_StringVector_1
 }
 
 
-SWIGEXPORT void JNICALL Java_com_davipb_jamspell_jni_JamspellJNI_StringVector_1reserve(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2) {
+SWIGEXPORT void JNICALL Java_com_davipb_jamspell_jni_JamSpellJNI_StringVector_1reserve(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2) {
   std::vector< std::wstring > *arg1 = (std::vector< std::wstring > *) 0 ;
   std::vector< std::wstring >::size_type arg2 ;
   
@@ -331,7 +331,7 @@ SWIGEXPORT void JNICALL Java_com_davipb_jamspell_jni_JamspellJNI_StringVector_1r
 }
 
 
-SWIGEXPORT jboolean JNICALL Java_com_davipb_jamspell_jni_JamspellJNI_StringVector_1isEmpty(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+SWIGEXPORT jboolean JNICALL Java_com_davipb_jamspell_jni_JamSpellJNI_StringVector_1isEmpty(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
   jboolean jresult = 0 ;
   std::vector< std::wstring > *arg1 = (std::vector< std::wstring > *) 0 ;
   bool result;
@@ -346,7 +346,7 @@ SWIGEXPORT jboolean JNICALL Java_com_davipb_jamspell_jni_JamspellJNI_StringVecto
 }
 
 
-SWIGEXPORT void JNICALL Java_com_davipb_jamspell_jni_JamspellJNI_StringVector_1clear(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+SWIGEXPORT void JNICALL Java_com_davipb_jamspell_jni_JamSpellJNI_StringVector_1clear(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
   std::vector< std::wstring > *arg1 = (std::vector< std::wstring > *) 0 ;
   
   (void)jenv;
@@ -357,7 +357,7 @@ SWIGEXPORT void JNICALL Java_com_davipb_jamspell_jni_JamspellJNI_StringVector_1c
 }
 
 
-SWIGEXPORT void JNICALL Java_com_davipb_jamspell_jni_JamspellJNI_StringVector_1add(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jstring jarg2) {
+SWIGEXPORT void JNICALL Java_com_davipb_jamspell_jni_JamSpellJNI_StringVector_1add(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jstring jarg2) {
   std::vector< std::wstring > *arg1 = (std::vector< std::wstring > *) 0 ;
   std::vector< std::wstring >::value_type *arg2 = 0 ;
   
@@ -386,7 +386,7 @@ SWIGEXPORT void JNICALL Java_com_davipb_jamspell_jni_JamspellJNI_StringVector_1a
 }
 
 
-SWIGEXPORT jstring JNICALL Java_com_davipb_jamspell_jni_JamspellJNI_StringVector_1get(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2) {
+SWIGEXPORT jstring JNICALL Java_com_davipb_jamspell_jni_JamSpellJNI_StringVector_1get(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2) {
   jstring jresult = 0 ;
   std::vector< std::wstring > *arg1 = (std::vector< std::wstring > *) 0 ;
   int arg2 ;
@@ -416,7 +416,7 @@ SWIGEXPORT jstring JNICALL Java_com_davipb_jamspell_jni_JamspellJNI_StringVector
 }
 
 
-SWIGEXPORT void JNICALL Java_com_davipb_jamspell_jni_JamspellJNI_StringVector_1set(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2, jstring jarg3) {
+SWIGEXPORT void JNICALL Java_com_davipb_jamspell_jni_JamSpellJNI_StringVector_1set(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2, jstring jarg3) {
   std::vector< std::wstring > *arg1 = (std::vector< std::wstring > *) 0 ;
   int arg2 ;
   std::vector< std::wstring >::value_type *arg3 = 0 ;
@@ -454,7 +454,7 @@ SWIGEXPORT void JNICALL Java_com_davipb_jamspell_jni_JamspellJNI_StringVector_1s
 }
 
 
-SWIGEXPORT void JNICALL Java_com_davipb_jamspell_jni_JamspellJNI_delete_1StringVector(JNIEnv *jenv, jclass jcls, jlong jarg1) {
+SWIGEXPORT void JNICALL Java_com_davipb_jamspell_jni_JamSpellJNI_delete_1StringVector(JNIEnv *jenv, jclass jcls, jlong jarg1) {
   std::vector< std::wstring > *arg1 = (std::vector< std::wstring > *) 0 ;
   
   (void)jenv;
@@ -464,7 +464,7 @@ SWIGEXPORT void JNICALL Java_com_davipb_jamspell_jni_JamspellJNI_delete_1StringV
 }
 
 
-SWIGEXPORT jboolean JNICALL Java_com_davipb_jamspell_jni_JamspellJNI_NativeSpellCorrector_1loadLangModel(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jstring jarg2) {
+SWIGEXPORT jboolean JNICALL Java_com_davipb_jamspell_jni_JamSpellJNI_NativeSpellCorrector_1loadLangModel(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jstring jarg2) {
   jboolean jresult = 0 ;
   NJamSpell::TSpellCorrector *arg1 = (NJamSpell::TSpellCorrector *) 0 ;
   std::string *arg2 = 0 ;
@@ -489,7 +489,7 @@ SWIGEXPORT jboolean JNICALL Java_com_davipb_jamspell_jni_JamspellJNI_NativeSpell
 }
 
 
-SWIGEXPORT jboolean JNICALL Java_com_davipb_jamspell_jni_JamspellJNI_NativeSpellCorrector_1trainLangModel(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jstring jarg2, jstring jarg3, jstring jarg4) {
+SWIGEXPORT jboolean JNICALL Java_com_davipb_jamspell_jni_JamSpellJNI_NativeSpellCorrector_1trainLangModel(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jstring jarg2, jstring jarg3, jstring jarg4) {
   jboolean jresult = 0 ;
   NJamSpell::TSpellCorrector *arg1 = (NJamSpell::TSpellCorrector *) 0 ;
   std::string *arg2 = 0 ;
@@ -534,7 +534,7 @@ SWIGEXPORT jboolean JNICALL Java_com_davipb_jamspell_jni_JamspellJNI_NativeSpell
 }
 
 
-SWIGEXPORT jlong JNICALL Java_com_davipb_jamspell_jni_JamspellJNI_NativeSpellCorrector_1getCandidates(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2, jobject jarg2_, jlong jarg3) {
+SWIGEXPORT jlong JNICALL Java_com_davipb_jamspell_jni_JamSpellJNI_NativeSpellCorrector_1getCandidates(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2, jobject jarg2_, jlong jarg3) {
   jlong jresult = 0 ;
   NJamSpell::TSpellCorrector *arg1 = (NJamSpell::TSpellCorrector *) 0 ;
   std::vector< std::wstring > *arg2 = 0 ;
@@ -558,7 +558,7 @@ SWIGEXPORT jlong JNICALL Java_com_davipb_jamspell_jni_JamspellJNI_NativeSpellCor
 }
 
 
-SWIGEXPORT jstring JNICALL Java_com_davipb_jamspell_jni_JamspellJNI_NativeSpellCorrector_1fixFragment(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jstring jarg2) {
+SWIGEXPORT jstring JNICALL Java_com_davipb_jamspell_jni_JamSpellJNI_NativeSpellCorrector_1fixFragment(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jstring jarg2) {
   jstring jresult = 0 ;
   NJamSpell::TSpellCorrector *arg1 = (NJamSpell::TSpellCorrector *) 0 ;
   std::wstring *arg2 = 0 ;
@@ -597,7 +597,7 @@ SWIGEXPORT jstring JNICALL Java_com_davipb_jamspell_jni_JamspellJNI_NativeSpellC
 }
 
 
-SWIGEXPORT jstring JNICALL Java_com_davipb_jamspell_jni_JamspellJNI_NativeSpellCorrector_1fixFragmentNormalized(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jstring jarg2) {
+SWIGEXPORT jstring JNICALL Java_com_davipb_jamspell_jni_JamSpellJNI_NativeSpellCorrector_1fixFragmentNormalized(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jstring jarg2) {
   jstring jresult = 0 ;
   NJamSpell::TSpellCorrector *arg1 = (NJamSpell::TSpellCorrector *) 0 ;
   std::wstring *arg2 = 0 ;
@@ -636,7 +636,7 @@ SWIGEXPORT jstring JNICALL Java_com_davipb_jamspell_jni_JamspellJNI_NativeSpellC
 }
 
 
-SWIGEXPORT void JNICALL Java_com_davipb_jamspell_jni_JamspellJNI_NativeSpellCorrector_1setPenalty(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jdouble jarg2, jdouble jarg3) {
+SWIGEXPORT void JNICALL Java_com_davipb_jamspell_jni_JamSpellJNI_NativeSpellCorrector_1setPenalty(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jdouble jarg2, jdouble jarg3) {
   NJamSpell::TSpellCorrector *arg1 = (NJamSpell::TSpellCorrector *) 0 ;
   double arg2 ;
   double arg3 ;
@@ -651,7 +651,7 @@ SWIGEXPORT void JNICALL Java_com_davipb_jamspell_jni_JamspellJNI_NativeSpellCorr
 }
 
 
-SWIGEXPORT void JNICALL Java_com_davipb_jamspell_jni_JamspellJNI_NativeSpellCorrector_1setMaxCandiatesToCheck(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2) {
+SWIGEXPORT void JNICALL Java_com_davipb_jamspell_jni_JamSpellJNI_NativeSpellCorrector_1setMaxCandiatesToCheck(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2) {
   NJamSpell::TSpellCorrector *arg1 = (NJamSpell::TSpellCorrector *) 0 ;
   size_t arg2 ;
   
@@ -664,7 +664,7 @@ SWIGEXPORT void JNICALL Java_com_davipb_jamspell_jni_JamspellJNI_NativeSpellCorr
 }
 
 
-SWIGEXPORT jlong JNICALL Java_com_davipb_jamspell_jni_JamspellJNI_new_1NativeSpellCorrector(JNIEnv *jenv, jclass jcls) {
+SWIGEXPORT jlong JNICALL Java_com_davipb_jamspell_jni_JamSpellJNI_new_1NativeSpellCorrector(JNIEnv *jenv, jclass jcls) {
   jlong jresult = 0 ;
   NJamSpell::TSpellCorrector *result = 0 ;
   
@@ -676,7 +676,7 @@ SWIGEXPORT jlong JNICALL Java_com_davipb_jamspell_jni_JamspellJNI_new_1NativeSpe
 }
 
 
-SWIGEXPORT void JNICALL Java_com_davipb_jamspell_jni_JamspellJNI_delete_1NativeSpellCorrector(JNIEnv *jenv, jclass jcls, jlong jarg1) {
+SWIGEXPORT void JNICALL Java_com_davipb_jamspell_jni_JamSpellJNI_delete_1NativeSpellCorrector(JNIEnv *jenv, jclass jcls, jlong jarg1) {
   NJamSpell::TSpellCorrector *arg1 = (NJamSpell::TSpellCorrector *) 0 ;
   
   (void)jenv;

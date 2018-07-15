@@ -8,5 +8,5 @@
 
 package com.davipb.jamspell.jni;
 
-public class Jamspell {
+public class JamSpell {
 }
