@@ -1,0 +1,23 @@
+jar {
+    manifest {
+        attributes 'Implementation-Title': 'JamSpell Java', 'Implementation-Version': version
+        attributes 'Specification-Title': 'JamSpell C++', 'Specification-Version': '0.0.11'
+    }
+}
+
+
+task sourcesJar(type: Jar) {
+    from sourceSets.main.allJava
+    classifier = 'sources'
+}
+
+javadoc {
+    dependsOn delombok
+    source = delombok.outputDir
+    options.addBooleanOption('html5', true)
+}
+
+task javadocJar(type: Jar) {
+    from javadoc
+    classifier = 'javadoc'
+}
