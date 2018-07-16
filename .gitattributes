@@ -1,0 +1,17 @@
+* text=auto
+
+*.txt text
+*.cpp text
+*.hpp text
+*.java text
+*.gradle text
+*.i text
+*.md text
+*.properties text
+
+*.ps1 text eol=crlf
+*.sh text eol=lf
+
+*.dll binary
+*.so binary
+*.jar binary
