@@ -79,6 +79,12 @@ public final class SpellCorrector {
     /**
      * Loads a pre-trained language model from an input stream. The stream will be saved to
      * a temporary file before being sent to the JamSpell engine.
+     * <p>
+     * Please note that JamSpell model files are currently not cross-platform, meaning that
+     * you must load a model that was trained from the same native library that is being used
+     * in the current platform.
+     * Trying to load a model from a different platform will cause the program to hang
+     * indefinitely.
      *
      * @param stream The stream of the language model.
      * @throws JamSpellException When the JamSpell engine is unable to load the model.
@@ -96,6 +102,12 @@ public final class SpellCorrector {
 
     /**
      * Loads a pre-trained language model from a file on disk.
+     * <p>
+     * Please note that JamSpell model files are currently not cross-platform, meaning that
+     * you must load a model that was trained from the same native library that is being used
+     * in the current platform.
+     * Trying to load a model from a different platform will cause the program to hang
+     * indefinitely.
      *
      * @param modelFile The language model file.
      * @throws JamSpellException When the JamSpell engine is unable to load the model.
@@ -106,6 +118,12 @@ public final class SpellCorrector {
 
     /**
      * Loads a pre-trained language model from a file on disk.
+     * <p>
+     * Please note that JamSpell model files are currently not cross-platform, meaning that
+     * you must load a model that was trained from the same native library that is being used
+     * in the current platform.
+     * Trying to load a model from a different platform will cause the program to hang
+     * indefinitely.
      *
      * @param modelFilePath The path to the language model file.
      * @throws JamSpellException When the JamSpell engine is unable to load the model.

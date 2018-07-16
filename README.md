@@ -2,6 +2,10 @@
 A Java binding for [JamSpell](https://github.com/bakwc/JamSpell) (a modern spellchecking library), powered by [Swig](http://www.swig.org/).
 This project contains both the JNI C++ implementation and a wrapper Java library for ease of use.
 
+## Portability of models
+As of release 0.0.11, JamSpell models [are not cross-platform](https://github.com/bakwc/JamSpell/issues/40).
+So while this library will run on any platform for which JamSpell's native library is compiled, models are tied to the native library that generated them.
+
 ## Native libraries
 Before any of the classes in this library are used, the native JNI + JamSpell libraries are loaded into the JVM.
 Native libraries are located by reading the file `/com/davipb/jamspell/<os>/<arch>/<bit>/jamspell-jni-name` at runtime, where `<os>` is the Operational System, `<arch>` the processor architecture, and `<bit>` the processor bitness.
