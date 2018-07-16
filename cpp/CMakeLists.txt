@@ -4,6 +4,9 @@ project(jamspell-jni)
 if (MSVC)
     set(CMAKE_CXX_FLAGS "/EHsc /W3")
 endif(MSVC)
+if (UNIX)
+    set(CMAKE_CXX_FLAGS "-Os -s")
+endif(UNIX)
 
 set(JAVA_INCLUDE "$ENV{JAVA_INCLUDE}")
 if (JAVA_INCLUDE STREQUAL "")
@@ -14,7 +17,12 @@ if (JAVA_INCLUDE STREQUAL "")
     set(JAVA_INCLUDE "$ENV{JAVA_HOME}/include")
 endif()
 
-include_directories("${CMAKE_SOURCE_DIR}/../JamSpell/" "${JAVA_INCLUDE}" "${JAVA_INCLUDE}/win32")
+include_directories(
+    "${CMAKE_SOURCE_DIR}/../JamSpell/" 
+    "${JAVA_INCLUDE}" 
+    "${JAVA_INCLUDE}/win32"
+    "${JAVA_INCLUDE}/linux"
+)
 
 add_subdirectory(../JamSpell jamspell)
 add_library(jamspell-jni SHARED jamspell-jni.cpp)

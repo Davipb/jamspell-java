@@ -16,8 +16,9 @@ For more details on the process, see the javadoc for the `com.davipb.jamspell.Ja
 
 ### Built-in platform support
 Currently, the following platforms have built-in support and won't need a custom compiled JNI library:
-* Windows x86 32bit
-* Windows x86 64bit
+* Windows x86 32-bit
+* Windows x86 64-bit
+* Linux x86 64-bit
 
 ## Generating & building
 To update the Swig-generated files, run Swig at the `jamspell-jni.i` file located at the root of the project.
