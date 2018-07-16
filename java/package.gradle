@@ -7,6 +7,9 @@ jar {
 
 
 task sourcesJar(type: Jar) {
+    group = 'build'
+    description = 'Assembles a jar archive containing the source code.'
+
     from sourceSets.main.allJava
     classifier = 'sources'
 }
@@ -14,10 +17,20 @@ task sourcesJar(type: Jar) {
 javadoc {
     dependsOn delombok
     source = delombok.outputDir
-    options.addBooleanOption('html5', true)
+    options.addBooleanOption 'html5', true
+    options.addStringOption 'tag', 'apiNote:a:API Note:'
+    options.addStringOption 'tag', 'implSpec:a:Implementation Requirements:'
+    options.addStringOption 'tag', 'implNote:a:Implementation Note:'
+    options.addStringOption 'link', 'https://docs.oracle.com/javase/10/docs/api'
+
 }
 
 task javadocJar(type: Jar) {
+    group = 'build'
+    description = 'Assembles a jar archive containing the javadoc.'
+
     from javadoc
     classifier = 'javadoc'
 }
+
+assemble.dependsOn sourcesJar, javadocJar

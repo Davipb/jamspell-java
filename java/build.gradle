@@ -11,7 +11,7 @@ wrapper {
 }
 
 group = 'com.davipb'
-version = '1.0.0-SNAPSHOT'
+version = '0.1.0'
 
 sourceCompatibility = 8
 targetCompatibility = 8
@@ -33,6 +33,7 @@ lombok {
 import io.franzbecker.gradle.lombok.task.DelombokTask
 task delombok(type: DelombokTask) {
     dependsOn compileJava
+    classpath configurations.compileClasspath
 
     ext.outputDir = file("$buildDir/delombok")
     outputs.dir outputDir
