@@ -4,6 +4,7 @@
 %rename("%(lowercamelcase)s", %$isfunction) "";
 
 %ignore GetCandidatesRaw;
+%ignore GetLangModel;
 
 SWIG_JAVABODY_PROXY(public, public, SWIGTYPE)
 SWIG_JAVABODY_TYPEWRAPPER(public, public, public, SWIGTYPE)
