@@ -10,9 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
+import java.nio.file.*;
 import java.util.Arrays;
 import java.util.List;
 
@@ -131,6 +129,76 @@ public final class SpellCorrector {
     public void loadLangModel(@NonNull String modelFilePath) throws JamSpellException {
         val success = corrector.loadLangModel(modelFilePath);
         if (!success) throw new JamSpellException("Unable to load model");
+    }
+
+    /**
+     * Loads a platform-specific model. The exact location of the model is derived by
+     * appending {@link PlatformUtils#OS_IDENTIFIER} to the specified root directory, then appending
+     * {@code model.bin} to it.
+     *
+     * @param root The root directory from which to derive the path of the model.
+     * @throws JamSpellException When the JamSpell engine is unable to load the model.
+     */
+    public void loadPlatformLangModel(@NonNull String root) throws JamSpellException {
+        loadPlatformLangModel(Paths.get(root));
+    }
+
+
+    /**
+     * Loads a platform-specific model. The exact location of the model is derived by
+     * appending {@link PlatformUtils#OS_IDENTIFIER} to the current working directory, then appending
+     * {@code model.bin} to it.
+     *
+     * @throws JamSpellException When the JamSpell engine is unable to load the model.
+     */
+    public void loadPlatformLangModel() throws JamSpellException {
+        loadPlatformLangModel(Paths.get(""), "model.bin");
+    }
+
+    /**
+     * Loads a platform-specific model. The exact location of the model is derived by
+     * appending {@link PlatformUtils#OS_IDENTIFIER} to the specified root directory, then appending
+     * {@code model.bin} to it.
+     *
+     * @param root The root directory from which to derive the path of the model.
+     * @throws JamSpellException When the JamSpell engine is unable to load the model.
+     */
+    public void loadPlatformLangModel(@NonNull Path root) throws JamSpellException {
+        loadPlatformLangModel(root, "model.bin");
+    }
+
+    /**
+     * Loads a platform-specific model. The exact location of the model is derived by
+     * appending {@link PlatformUtils#OS_IDENTIFIER} to the specified root directory, then appending
+     * the specified model name to it.
+     *
+     * @param root The root directory from which to derive the path of the model.
+     * @param name The file name of the model inside the derived directory path.
+     * @throws JamSpellException When the JamSpell engine is unable to load the model.
+     */
+    public void loadPlatformLangModel(@NonNull String root, @NonNull String name) throws JamSpellException {
+        loadPlatformLangModel(Paths.get(root), name);
+    }
+
+    /**
+     * Loads a platform-specific model. The exact location of the model is derived by
+     * appending {@link PlatformUtils#OS_IDENTIFIER} to the specified root directory, then appending
+     * the specified model name to it.
+     *
+     * @param root The root directory from which to derive the path of the model.
+     * @param name The file name of the model inside the derived directory path.
+     * @throws JamSpellException When the JamSpell engine is unable to load the model.
+     */
+    public void loadPlatformLangModel(@NonNull Path root, @NonNull String name) throws JamSpellException {
+        val leaf = root.getFileSystem().getPath(
+            PlatformUtils.OS_IDENTIFIER,
+            PlatformUtils.ARCH_IDENTIFIER,
+            PlatformUtils.BITNESS_IDENTIFIER,
+            name
+        );
+
+        val modelPath = root.resolve(leaf);
+        loadLangModel(modelPath.toString());
     }
 
     /**
