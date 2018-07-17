@@ -7,12 +7,15 @@ import lombok.NonNull;
 import lombok.val;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * The main JamSpell class, capable of detecting and fixing spelling mistakes.
@@ -22,15 +25,6 @@ public final class SpellCorrector {
     static { JamSpellMemoryManager.initialize(); }
 
     private final NativeSpellCorrector corrector = new NativeSpellCorrector();
-
-    {
-        JamSpellMemoryManager.manage(
-            corrector,
-            NativeSpellCorrector.getCPtr(corrector),
-            JamSpellJNI::delete_NativeSpellCorrector
-        );
-    }
-
     /**
      * The penalty applied to known words.
      *
@@ -55,6 +49,14 @@ public final class SpellCorrector {
      * convenience field, and its default value must be updated if it is changed in the native code.
      */
     private @Getter int maxCandidatesToCheck = 14;
+
+    {
+        JamSpellMemoryManager.manage(
+            corrector,
+            NativeSpellCorrector.getCPtr(corrector),
+            JamSpellJNI::delete_NativeSpellCorrector
+        );
+    }
 
     /** @see #getKnownWordsPenalty() */
     public void setKnownWordsPenalty(double knownWordsPenalty) {
@@ -92,7 +94,7 @@ public final class SpellCorrector {
             val temp = Files.createTempFile("jamspell-", ".bin");
             Files.copy(stream, temp, StandardCopyOption.REPLACE_EXISTING);
             temp.toFile().deleteOnExit();
-            loadLangModel(temp.toString());
+            loadLangModel(temp);
         } catch (IOException e) {
             throw new JamSpellException("Unable to save InputStream to temporary file", e);
         }
@@ -107,11 +109,15 @@ public final class SpellCorrector {
      * Trying to load a model from a different platform will cause the program to hang
      * indefinitely.
      *
-     * @param modelFile The language model file.
+     * @param modelPath The language model file.
      * @throws JamSpellException When the JamSpell engine is unable to load the model.
      */
-    public void loadLangModel(@NonNull File modelFile) throws JamSpellException {
-        loadLangModel(modelFile.getPath());
+    public void loadLangModel(@NonNull Path modelPath) throws JamSpellException {
+        if (Files.notExists(modelPath)) throw new JamSpellException("Model '" + modelPath + "' doesn't exit");
+        if (Files.isDirectory(modelPath)) throw new JamSpellException("Model '" + modelPath + "' is not a file");
+
+        val success = corrector.loadLangModel(modelPath.toString());
+        if (!success) throw new JamSpellException("Unable to load model");
     }
 
     /**
@@ -123,18 +129,16 @@ public final class SpellCorrector {
      * Trying to load a model from a different platform will cause the program to hang
      * indefinitely.
      *
-     * @param modelFilePath The path to the language model file.
+     * @param modelPath The path to the language model file.
      * @throws JamSpellException When the JamSpell engine is unable to load the model.
      */
-    public void loadLangModel(@NonNull String modelFilePath) throws JamSpellException {
-        val success = corrector.loadLangModel(modelFilePath);
-        if (!success) throw new JamSpellException("Unable to load model");
+    public void loadLangModel(@NonNull String modelPath) throws JamSpellException {
+        loadLangModel(Paths.get(modelPath));
     }
 
     /**
-     * Loads a platform-specific model. The exact location of the model is derived by
-     * appending {@link PlatformUtils#OS_IDENTIFIER} to the specified root directory, then appending
-     * {@code model.bin} to it.
+     * Loads a platform-specific model. The exact location of the model is given by {@link PlatformUtils#makePlatformSpecific}
+     * using {@code model.bin} as the name.
      *
      * @param root The root directory from which to derive the path of the model.
      * @throws JamSpellException When the JamSpell engine is unable to load the model.
@@ -145,60 +149,50 @@ public final class SpellCorrector {
 
 
     /**
-     * Loads a platform-specific model. The exact location of the model is derived by
-     * appending {@link PlatformUtils#OS_IDENTIFIER} to the current working directory, then appending
-     * {@code model.bin} to it.
+     * Loads a platform-specific model. The exact location of the model is given by {@link PlatformUtils#makePlatformSpecific},
+     * using the current working directory as the root and {@code model.bin} as the name.
      *
      * @throws JamSpellException When the JamSpell engine is unable to load the model.
+     * @see PlatformUtils#makePlatformSpecific
      */
     public void loadPlatformLangModel() throws JamSpellException {
         loadPlatformLangModel(Paths.get(""), "model.bin");
     }
 
     /**
-     * Loads a platform-specific model. The exact location of the model is derived by
-     * appending {@link PlatformUtils#OS_IDENTIFIER} to the specified root directory, then appending
-     * {@code model.bin} to it.
+     * Loads a platform-specific model. The exact location of the model is given by {@link PlatformUtils#makePlatformSpecific},
+     * using {@code model.bin} as the name.
      *
      * @param root The root directory from which to derive the path of the model.
      * @throws JamSpellException When the JamSpell engine is unable to load the model.
+     * @see PlatformUtils#makePlatformSpecific
      */
     public void loadPlatformLangModel(@NonNull Path root) throws JamSpellException {
         loadPlatformLangModel(root, "model.bin");
     }
 
     /**
-     * Loads a platform-specific model. The exact location of the model is derived by
-     * appending {@link PlatformUtils#OS_IDENTIFIER} to the specified root directory, then appending
-     * the specified model name to it.
+     * Loads a platform-specific model. The exact location of the model is given by {@link PlatformUtils#makePlatformSpecific}.
      *
      * @param root The root directory from which to derive the path of the model.
      * @param name The file name of the model inside the derived directory path.
      * @throws JamSpellException When the JamSpell engine is unable to load the model.
+     * @see PlatformUtils#makePlatformSpecific
      */
     public void loadPlatformLangModel(@NonNull String root, @NonNull String name) throws JamSpellException {
         loadPlatformLangModel(Paths.get(root), name);
     }
 
     /**
-     * Loads a platform-specific model. The exact location of the model is derived by
-     * appending {@link PlatformUtils#OS_IDENTIFIER} to the specified root directory, then appending
-     * the specified model name to it.
+     * Loads a platform-specific model. The exact location of the model is given by {@link PlatformUtils#makePlatformSpecific}.
      *
      * @param root The root directory from which to derive the path of the model.
      * @param name The file name of the model inside the derived directory path.
      * @throws JamSpellException When the JamSpell engine is unable to load the model.
+     * @see PlatformUtils#makePlatformSpecific
      */
     public void loadPlatformLangModel(@NonNull Path root, @NonNull String name) throws JamSpellException {
-        val leaf = root.getFileSystem().getPath(
-            PlatformUtils.OS_IDENTIFIER,
-            PlatformUtils.ARCH_IDENTIFIER,
-            PlatformUtils.BITNESS_IDENTIFIER,
-            name
-        );
-
-        val modelPath = root.resolve(leaf);
-        loadLangModel(modelPath.toString());
+        loadLangModel(PlatformUtils.makePlatformSpecific(root, name));
     }
 
     /**
@@ -214,17 +208,7 @@ public final class SpellCorrector {
      * @throws JamSpellException When the JamSpell engine is unable to train a new model.
      */
     public void trainLangModel(@NonNull String dataPath, @NonNull String alphabetPath) throws JamSpellException {
-
-        final Path modelPath;
-        try {
-            modelPath = Files.createTempFile("jamspell-", ".bin");
-            modelPath.toFile().deleteOnExit();
-        } catch (IOException e) {
-            throw new JamSpellException("Unable to create temporary model file", e);
-        }
-
-        val success = corrector.trainLangModel(dataPath, alphabetPath, modelPath.toString());
-        if (!success) throw new JamSpellException("Unable to train model");
+        trainLangModel(Paths.get(dataPath), Paths.get(alphabetPath));
     }
 
     /**
@@ -238,11 +222,190 @@ public final class SpellCorrector {
      * @param alphabetPath The path of the file containing the alphabet for the target language. Only characters included
      *                     in the alphabet will be considered for the purposes of the training.
      * @param modelPath    The path of the file where the trained model will be saved.
+     *                     This file and all its parent directories will be created if they don't exist.
      * @throws JamSpellException When the JamSpell engine is unable to train a new model.
      */
     public void trainLangModel(@NonNull String dataPath, @NonNull String alphabetPath, @NonNull String modelPath) throws JamSpellException {
-        val success = corrector.trainLangModel(dataPath, alphabetPath, modelPath);
-        if (!success) throw new JamSpellException("Unable to train model");
+        trainLangModel(Paths.get(dataPath), Paths.get(alphabetPath), Paths.get(modelPath));
+    }
+
+    /**
+     * Trains a new language model in this spell corrector and saves its results to a temporary file.
+     * This operation is quite heavy and time-consuming, and, as such, it is recommended to pre-train models and
+     * ship the model files to be loaded with {@link #loadLangModel(String)}, a much lighter operation.
+     * <p>
+     * If training models at runtime is inevitable for your application, considering running this method in a separate thread.
+     *
+     * @param dataPath     The path of the file containing the training data.
+     * @param alphabetPath The path of the file containing the alphabet for the target language. Only characters included
+     *                     in the alphabet will be considered for the purposes of the training.
+     * @throws JamSpellException When the JamSpell engine is unable to train a new model.
+     */
+    public void trainLangModel(@NonNull Path dataPath, @NonNull Path alphabetPath) throws JamSpellException {
+
+        final Path modelPath;
+        try {
+            modelPath = Files.createTempFile("jamspell-", ".bin");
+            modelPath.toFile().deleteOnExit();
+        } catch (IOException e) {
+            throw new JamSpellException("Unable to create temporary model file", e);
+        }
+
+        trainLangModel(dataPath, alphabetPath, modelPath);
+    }
+
+    /**
+     * Trains a new language model in this spell corrector and saves its results to a platform-specific model file.
+     * The exact location of the model is given by {@link PlatformUtils#makePlatformSpecific}, using the current working
+     * directory as the root and {@code model.bin} as the name.
+     * <p>
+     * This operation is quite heavy and time-consuming, and, as such, it is recommended to pre-train models and
+     * ship the model files to be loaded with {@link #loadLangModel}, a much lighter operation.
+     * <p>
+     * If training models at runtime is inevitable for your application, considering running this method in a separate thread.
+     *
+     * @param dataPath     The path of the file containing the training data.
+     * @param alphabetPath The path of the file containing the alphabet for the target language. Only characters included
+     *                     in the alphabet will be considered for the purposes of the training.
+     * @throws JamSpellException When the JamSpell engine is unable to train a new model.
+     */
+    public void trainPlatformLangModel(@NonNull String dataPath, @NonNull String alphabetPath) {
+        trainPlatformLangModel(Paths.get(dataPath), Paths.get(alphabetPath));
+    }
+
+    /**
+     * Trains a new language model in this spell corrector and saves its results to a platform-specific model file.
+     * The exact location of the model is given by {@link PlatformUtils#makePlatformSpecific}, using {@code model.bin}
+     * as the name.
+     * <p>
+     * This operation is quite heavy and time-consuming, and, as such, it is recommended to pre-train models and
+     * ship the model files to be loaded with {@link #loadLangModel}, a much lighter operation.
+     * <p>
+     * If training models at runtime is inevitable for your application, considering running this method in a separate thread.
+     *
+     * @param dataPath     The path of the file containing the training data.
+     * @param alphabetPath The path of the file containing the alphabet for the target language. Only characters included
+     *                     in the alphabet will be considered for the purposes of the training.
+     * @param modelRoot    The base directory where the model will be saved.
+     * @throws JamSpellException When the JamSpell engine is unable to train a new model.
+     */
+    public void trainPlatformLangModel(@NonNull String dataPath, @NonNull String alphabetPath, @NonNull String modelRoot) {
+        trainPlatformLangModel(Paths.get(dataPath), Paths.get(alphabetPath), Paths.get(modelRoot));
+    }
+
+    /**
+     * Trains a new language model in this spell corrector and saves its results to a platform-specific model file.
+     * The exact location of the model is given by {@link PlatformUtils#makePlatformSpecific}.
+     * <p>
+     * This operation is quite heavy and time-consuming, and, as such, it is recommended to pre-train models and
+     * ship the model files to be loaded with {@link #loadLangModel}, a much lighter operation.
+     * <p>
+     * If training models at runtime is inevitable for your application, considering running this method in a separate thread.
+     *
+     * @param dataPath     The path of the file containing the training data.
+     * @param alphabetPath The path of the file containing the alphabet for the target language. Only characters included
+     *                     in the alphabet will be considered for the purposes of the training.
+     * @param modelRoot    The base directory where the model will be saved.
+     * @param modelName    The name of the generated model file.
+     * @throws JamSpellException When the JamSpell engine is unable to train a new model.
+     */
+    public void trainPlatformLangModel(@NonNull String dataPath, @NonNull String alphabetPath, @NonNull String modelRoot, @NonNull String modelName) {
+        trainPlatformLangModel(Paths.get(dataPath), Paths.get(alphabetPath), Paths.get(modelRoot), modelName);
+    }
+
+    /**
+     * Trains a new language model in this spell corrector and saves its results to a platform-specific model file.
+     * The exact location of the model is given by {@link PlatformUtils#makePlatformSpecific}, using the current working
+     * directory as the root and {@code model.bin} as the name.
+     * <p>
+     * This operation is quite heavy and time-consuming, and, as such, it is recommended to pre-train models and
+     * ship the model files to be loaded with {@link #loadLangModel}, a much lighter operation.
+     * <p>
+     * If training models at runtime is inevitable for your application, considering running this method in a separate thread.
+     *
+     * @param dataPath     The path of the file containing the training data.
+     * @param alphabetPath The path of the file containing the alphabet for the target language. Only characters included
+     *                     in the alphabet will be considered for the purposes of the training.
+     * @throws JamSpellException When the JamSpell engine is unable to train a new model.
+     */
+    public void trainPlatformLangModel(@NonNull Path dataPath, @NonNull Path alphabetPath) {
+        trainPlatformLangModel(dataPath, alphabetPath, Paths.get(""), "model.bin");
+    }
+
+    /**
+     * Trains a new language model in this spell corrector and saves its results to a platform-specific model file.
+     * The exact location of the model is given by {@link PlatformUtils#makePlatformSpecific}, using {@code model.bin}
+     * as the name.
+     * <p>
+     * This operation is quite heavy and time-consuming, and, as such, it is recommended to pre-train models and
+     * ship the model files to be loaded with {@link #loadLangModel}, a much lighter operation.
+     * <p>
+     * If training models at runtime is inevitable for your application, considering running this method in a separate thread.
+     *
+     * @param dataPath     The path of the file containing the training data.
+     * @param alphabetPath The path of the file containing the alphabet for the target language. Only characters included
+     *                     in the alphabet will be considered for the purposes of the training.
+     * @param modelRoot    The base directory where the model will be saved.
+     * @throws JamSpellException When the JamSpell engine is unable to train a new model.
+     */
+    public void trainPlatformLangModel(@NonNull Path dataPath, @NonNull Path alphabetPath, @NonNull Path modelRoot) {
+        trainPlatformLangModel(dataPath, alphabetPath, modelRoot, "model.bin");
+    }
+
+    /**
+     * Trains a new language model in this spell corrector and saves its results to a platform-specific model file.
+     * The exact location of the model is given by {@link PlatformUtils#makePlatformSpecific}.
+     * <p>
+     * This operation is quite heavy and time-consuming, and, as such, it is recommended to pre-train models and
+     * ship the model files to be loaded with {@link #loadLangModel}, a much lighter operation.
+     * <p>
+     * If training models at runtime is inevitable for your application, considering running this method in a separate thread.
+     *
+     * @param dataPath     The path of the file containing the training data.
+     * @param alphabetPath The path of the file containing the alphabet for the target language. Only characters included
+     *                     in the alphabet will be considered for the purposes of the training.
+     * @param modelRoot    The base directory where the model will be saved.
+     * @param modelName    The name of the generated model file.
+     * @throws JamSpellException When the JamSpell engine is unable to train a new model.
+     */
+    public void trainPlatformLangModel(@NonNull Path dataPath, @NonNull Path alphabetPath, @NonNull Path modelRoot, @NonNull String modelName) {
+        val modelPath = PlatformUtils.makePlatformSpecific(modelRoot, modelName);
+        trainLangModel(dataPath, alphabetPath, modelPath);
+    }
+
+    /**
+     * Trains a new language model in this spell corrector and saves its results to a model file.
+     * This operation is quite heavy and time-consuming, and, as such, it is recommended to pre-train models and
+     * ship the model files to be loaded with {@link #loadLangModel}, a much lighter operation.
+     * <p>
+     * If training models at runtime is inevitable for your application, considering running this method in a separate thread.
+     *
+     * @param dataPath     The path of the file containing the training data.
+     * @param alphabetPath The path of the file containing the alphabet for the target language. Only characters included
+     *                     in the alphabet will be considered for the purposes of the training.
+     * @param modelPath    The path of the file where the trained model will be saved.
+     *                     This file and all its parent directories will be created if they don't exist.
+     * @throws JamSpellException When the JamSpell engine is unable to train a new model.
+     */
+    public void trainLangModel(@NonNull Path dataPath, @NonNull Path alphabetPath, @NonNull Path modelPath) throws JamSpellException {
+        if (Files.notExists(dataPath)) throw new JamSpellException("Training data '" + dataPath + "' doesn't exist");
+        if (Files.notExists(alphabetPath))
+            throw new JamSpellException("Training alphabet '" + alphabetPath + "' doesn't exist");
+
+        if (Files.isDirectory(dataPath)) throw new JamSpellException("Training data '" + dataPath + "' is not a file");
+        if (Files.isDirectory(alphabetPath))
+            throw new JamSpellException("Training alphabet '" + alphabetPath + "' is not a file");
+        if (Files.isDirectory(modelPath))
+            throw new JamSpellException("Training result model '" + modelPath + "' is not a file");
+
+        try {
+            Files.createDirectories(modelPath.getParent());
+        } catch (IOException e) {
+            throw new JamSpellException("Unable to create parent directory for model '" + modelPath + "'", e);
+        }
+
+        val success = corrector.trainLangModel(dataPath.toString(), alphabetPath.toString(), modelPath.toString());
+        if (!success) throw new JamSpellException("The native JamSpell engine was unable to train");
     }
 
     /**
@@ -313,6 +476,6 @@ public final class SpellCorrector {
      */
     public @NotNull String fixFragment(@NonNull String text, boolean normalize) {
         if (normalize) return corrector.fixFragmentNormalized(text);
-        return corrector.fixFragment(text);
+        return Objects.requireNonNull(corrector.fixFragment(text));
     }
 }

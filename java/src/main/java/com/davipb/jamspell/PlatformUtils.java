@@ -1,10 +1,13 @@
 package com.davipb.jamspell;
 
+import lombok.NonNull;
 import lombok.val;
 import org.apache.commons.lang3.ArchUtils;
 import org.apache.commons.lang3.SystemUtils;
 import org.apache.commons.lang3.arch.Processor;
 import org.jetbrains.annotations.NotNull;
+
+import java.nio.file.Path;
 
 /** Internal class with strictly static helper methods for platform-dependant behavior. */
 class PlatformUtils {
@@ -78,5 +81,25 @@ class PlatformUtils {
         else BITNESS_IDENTIFIER = "other";
 
         PLATFORM_PATH = String.join("/", OS_IDENTIFIER, ARCH_IDENTIFIER, BITNESS_IDENTIFIER);
+    }
+
+    /**
+     * Generates a platform-specific path from a root and a final file name. The generated path is equivalent
+     * to appending {@link #OS_IDENTIFIER} to the root path, then appending the name to that, but using Path-specific
+     * methods for abstraction and compatibility.
+     *
+     * @param root The root directory of the path.
+     * @param name The name of the file.
+     * @return A platform-specific path.
+     */
+    static @NotNull Path makePlatformSpecific(@NonNull Path root, @NonNull String name) {
+        val leaf = root.getFileSystem().getPath(
+            PlatformUtils.OS_IDENTIFIER,
+            PlatformUtils.ARCH_IDENTIFIER,
+            PlatformUtils.BITNESS_IDENTIFIER,
+            name
+        );
+
+        return root.resolve(leaf);
     }
 }
