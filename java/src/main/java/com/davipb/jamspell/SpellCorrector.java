@@ -17,6 +17,11 @@ import java.util.*;
 
 /**
  * The main JamSpell class, capable of detecting and fixing spelling mistakes.
+ * This class must be initialized with a language model before being used.
+ * You can either load a pre-trained model (recommended) or train a model at runtime (very slow).
+ *
+ * @see #loadStandardLangModel()
+ * @see #trainPlatformLangModel(Path, Path, Path)
  */
 public final class SpellCorrector {
 
@@ -83,6 +88,9 @@ public final class SpellCorrector {
      * in the current platform.
      * Trying to load a model from a different platform will cause the program to hang
      * indefinitely.
+     * <p>
+     * Until this is fixed, it is recommended to use one of the {@link #loadPlatformLangModel} or
+     * {@link #loadStandardLangModel} instead.
      *
      * @param stream The stream of the language model.
      * @throws JamSpellException When the JamSpell engine is unable to load the model.
@@ -106,6 +114,9 @@ public final class SpellCorrector {
      * in the current platform.
      * Trying to load a model from a different platform will cause the program to hang
      * indefinitely.
+     * <p>
+     * Until this is fixed, it is recommended to use one of the {@link #loadPlatformLangModel} or
+     * {@link #loadStandardLangModel} instead.
      *
      * @param modelPath The language model file.
      * @throws JamSpellException When the JamSpell engine is unable to load the model.
@@ -127,6 +138,9 @@ public final class SpellCorrector {
      * in the current platform.
      * Trying to load a model from a different platform will cause the program to hang
      * indefinitely.
+     * <p>
+     * Until this is fixed, it is recommended to use one of the {@link #loadPlatformLangModel} or
+     * {@link #loadStandardLangModel} instead.
      *
      * @param resourceName The name of the resource. Must be an absolute name.
      * @throws JamSpellException When the resource doesn't exist or the JamSpell engine is unable to load the model.
@@ -144,8 +158,10 @@ public final class SpellCorrector {
      * {@link PlatformUtils#PLATFORM_PATH} to the root path, then appending {@code model.bin} to it.
      *
      * @param root The root resource path from which to derive the resource name.
+     * @throws JamSpellException When the platform resource doesn't exist or the JamSpell engien was unable to load
+     *                           the model.
      */
-    public void loadPlatformResourceLangModel(@NonNull String root) {
+    public void loadPlatformResourceLangModel(@NonNull String root) throws JamSpellException {
         loadPlatformResourceLangModel(root, "model.bin");
     }
 
@@ -176,8 +192,10 @@ public final class SpellCorrector {
      *
      * @param root The root resource path from which to derive the resource name.
      * @param name The name of the resource file.
+     * @throws JamSpellException When the platform resource doesn't exist or the JamSpell engien was unable to load
+     *                           the model.
      */
-    public void loadPlatformResourceLangModel(@NonNull String root, @NonNull String name) {
+    public void loadPlatformResourceLangModel(@NonNull String root, @NonNull String name) throws JamSpellException {
         loadResourceLangModel(PlatformUtils.makeResourcePlatformSpecific(root, name));
     }
 
@@ -185,6 +203,8 @@ public final class SpellCorrector {
      * Loads a standard pre-trained model for the default locale. If the default locale does not have a standard model, all of
      * its parent locales are searched before an error is thrown. For example, the locale "en-US-east" will cause
      * "en-US" and "en" to be searched.
+     * <p>
+     * Standard models have their resource root at {@code com/davipb/jamspell}, and are available as a separate library.
      *
      * @throws JamSpellException When there is no standard model for the default locale or the JamSpell engine
      *                           was unable to load the model.
@@ -197,6 +217,8 @@ public final class SpellCorrector {
      * Loads the standard pre-trained model for a locale. If the specified locale does not have a standard model, all of
      * its parent locales are searched before an error is thrown. For example, the locale "en-US-east" will cause
      * "en-US" and "en" to be searched.
+     * <p>
+     * Standard models have their resource root at {@code com/davipb/jamspell}, and are available as a separate library.
      *
      * @param locale The locale of the model to be loaded.
      * @throws JamSpellException When there is no standard model for the specified locale or the JamSpell engine
@@ -369,7 +391,7 @@ public final class SpellCorrector {
      *                     in the alphabet will be considered for the purposes of the training.
      * @throws JamSpellException When the JamSpell engine is unable to train a new model.
      */
-    public void trainPlatformLangModel(@NonNull String dataPath, @NonNull String alphabetPath) {
+    public void trainPlatformLangModel(@NonNull String dataPath, @NonNull String alphabetPath) throws JamSpellException {
         trainPlatformLangModel(Paths.get(dataPath), Paths.get(alphabetPath));
     }
 
@@ -389,7 +411,7 @@ public final class SpellCorrector {
      * @param modelRoot    The base directory where the model will be saved.
      * @throws JamSpellException When the JamSpell engine is unable to train a new model.
      */
-    public void trainPlatformLangModel(@NonNull String dataPath, @NonNull String alphabetPath, @NonNull String modelRoot) {
+    public void trainPlatformLangModel(@NonNull String dataPath, @NonNull String alphabetPath, @NonNull String modelRoot) throws JamSpellException {
         trainPlatformLangModel(Paths.get(dataPath), Paths.get(alphabetPath), Paths.get(modelRoot));
     }
 
@@ -409,7 +431,7 @@ public final class SpellCorrector {
      * @param modelName    The name of the generated model file.
      * @throws JamSpellException When the JamSpell engine is unable to train a new model.
      */
-    public void trainPlatformLangModel(@NonNull String dataPath, @NonNull String alphabetPath, @NonNull String modelRoot, @NonNull String modelName) {
+    public void trainPlatformLangModel(@NonNull String dataPath, @NonNull String alphabetPath, @NonNull String modelRoot, @NonNull String modelName) throws JamSpellException {
         trainPlatformLangModel(Paths.get(dataPath), Paths.get(alphabetPath), Paths.get(modelRoot), modelName);
     }
 
@@ -428,7 +450,7 @@ public final class SpellCorrector {
      *                     in the alphabet will be considered for the purposes of the training.
      * @throws JamSpellException When the JamSpell engine is unable to train a new model.
      */
-    public void trainPlatformLangModel(@NonNull Path dataPath, @NonNull Path alphabetPath) {
+    public void trainPlatformLangModel(@NonNull Path dataPath, @NonNull Path alphabetPath) throws JamSpellException {
         trainPlatformLangModel(dataPath, alphabetPath, Paths.get(""), "model.bin");
     }
 
@@ -448,7 +470,7 @@ public final class SpellCorrector {
      * @param modelRoot    The base directory where the model will be saved.
      * @throws JamSpellException When the JamSpell engine is unable to train a new model.
      */
-    public void trainPlatformLangModel(@NonNull Path dataPath, @NonNull Path alphabetPath, @NonNull Path modelRoot) {
+    public void trainPlatformLangModel(@NonNull Path dataPath, @NonNull Path alphabetPath, @NonNull Path modelRoot) throws JamSpellException {
         trainPlatformLangModel(dataPath, alphabetPath, modelRoot, "model.bin");
     }
 
@@ -468,7 +490,7 @@ public final class SpellCorrector {
      * @param modelName    The name of the generated model file.
      * @throws JamSpellException When the JamSpell engine is unable to train a new model.
      */
-    public void trainPlatformLangModel(@NonNull Path dataPath, @NonNull Path alphabetPath, @NonNull Path modelRoot, @NonNull String modelName) {
+    public void trainPlatformLangModel(@NonNull Path dataPath, @NonNull Path alphabetPath, @NonNull Path modelRoot, @NonNull String modelName) throws JamSpellException {
         val modelPath = PlatformUtils.makePathPlatformSpecific(modelRoot, modelName);
         trainLangModel(dataPath, alphabetPath, modelPath);
     }
