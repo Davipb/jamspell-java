@@ -11,8 +11,6 @@ import java.nio.file.Path;
 
 /** Internal class with strictly static helper methods for platform-dependant behavior. */
 class PlatformUtils {
-    private PlatformUtils() { throw new AssertionError(); }
-
     /**
      * A '/'-delimited unique path for the current platform, suitable for loading platform-specific resources
      * from the classpath. The generated path does not start nor end with a '/'.
@@ -27,7 +25,6 @@ class PlatformUtils {
      * @see #BITNESS_IDENTIFIER
      */
     final static String PLATFORM_PATH;
-
     /**
      * The identifier for the current Operational System. The exact identifiers are:
      * <ul>
@@ -39,7 +36,6 @@ class PlatformUtils {
      * </ul>
      */
     final static @NotNull String OS_IDENTIFIER;
-
     /**
      * The identifier for the current processor architecture. The exact identifiers are:
      * <ul>
@@ -50,7 +46,6 @@ class PlatformUtils {
      * </ul>
      */
     final static @NotNull String ARCH_IDENTIFIER;
-
     /**
      * The identifier for the current processor bitness. The exact identifiers are:
      * <ul>
@@ -83,6 +78,8 @@ class PlatformUtils {
         PLATFORM_PATH = String.join("/", OS_IDENTIFIER, ARCH_IDENTIFIER, BITNESS_IDENTIFIER);
     }
 
+    private PlatformUtils() { throw new AssertionError(); }
+
     /**
      * Generates a platform-specific path from a root and a final file name. The generated path is equivalent
      * to appending {@link #OS_IDENTIFIER} to the root path, then appending the name to that, but using Path-specific
@@ -92,7 +89,7 @@ class PlatformUtils {
      * @param name The name of the file.
      * @return A platform-specific path.
      */
-    static @NotNull Path makePlatformSpecific(@NonNull Path root, @NonNull String name) {
+    static @NotNull Path makePathPlatformSpecific(@NonNull Path root, @NonNull String name) {
         val leaf = root.getFileSystem().getPath(
             PlatformUtils.OS_IDENTIFIER,
             PlatformUtils.ARCH_IDENTIFIER,
@@ -101,5 +98,19 @@ class PlatformUtils {
         );
 
         return root.resolve(leaf);
+    }
+
+    /**
+     * Generates a platform-specific resource path from a root and a final resource name. The generated path is equivalent
+     * to appending {@link #OS_IDENTIFIER} to the root path, then appending the name to that, while normalizing path
+     * separators ('/').
+     *
+     * @param root The root directory of the path.
+     * @param name The name of the resource.
+     * @return A platform-specific resource path.
+     */
+    static @NotNull String makeResourcePlatformSpecific(@NonNull String root, @NonNull String name) {
+        if (root.endsWith("/")) root = root.substring(0, root.length() - 1);
+        return root + "/" + PlatformUtils.PLATFORM_PATH + "/" + name;
     }
 }
